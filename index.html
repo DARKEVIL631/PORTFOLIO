@@ -6,10 +6,53 @@
   <title>Akash Painuly — Portfolio</title>
   <link href="https://unpkg.com/aos@next/dist/aos.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <style>
     body { font-family: 'Poppins', sans-serif; }
     .video-background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1; }
     .video-background iframe { position: absolute; top: 50%; left: 50%; width: 200%; height: 200%; transform: translate(-50%, -50%); pointer-events: none; }
+
+    /* Contact Form */
+    .form-box {
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      max-width: 400px;
+      margin: 0 auto;
+      color: #000;
+    }
+    input, textarea, button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: 1px none #ccc;
+      font-size: 14px;
+    }
+    .contact-btn {
+      background: #007bff;
+      color: white;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+    .contact-btn:hover { background: #0056b3; }
+    .success { color: green; }
+    .error { color: red; }
+
+    /* Loader */
+    .loader {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #007bff;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      animation: spin 1s linear infinite;
+      margin: 10px auto;
+      display: none;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }
   </style>
 </head>
 <body class="bg-gray-900 text-white">
@@ -20,24 +63,28 @@
             frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
   </div>
 
-  <!-- Navbar -->
+<!-- Navbar -->
 <header class="fixed top-0 left-0 w-full bg-black bg-opacity-50 backdrop-blur-lg z-50">
   <nav class="container mx-auto flex justify-between items-center py-4 px-6">
-    
     <!-- Logo + Name -->
     <div class="flex items-center space-x-3">
-      <img src="1000053646.png" alt="Logo" class="w-10 h-10 rounded-full border-2 border-yellow-400">
+      <img src="1000053646.png" alt="Akash Logo" class="w-10 h-10 rounded-full border-2 border-yellow-400">
       <h1 class="text-2xl font-bold tracking-wide" id="siteName">Akash Painuly</h1>
     </div>
     
+    <!-- Hamburger Button -->
+    <button id="menuBtn" class="md:hidden text-yellow-400 text-3xl focus:outline-none">☰</button>
+    
     <!-- Navbar Links -->
-    <ul class="flex space-x-6">
-      <li><a href="#about" class="hover:text-yellow-400">About</a></li>
-      <li><a href="#experience" class="hover:text-yellow-400">Experience</a></li>
-      <li><a href="#skills" class="hover:text-yellow-400">Skills</a></li>
-      <li><a href="#projects" class="hover:text-yellow-400">Projects</a></li>
-      <li><a href="#education" class="hover:text-yellow-400">Education</a></li>
-      <li><a href="#contact" class="hover:text-yellow-400">Contact</a></li>
+    <ul id="menuLinks" 
+        class="hidden md:flex space-x-6 flex-col md:flex-row absolute md:static top-16 right-0 w-56 md:w-auto 
+               bg-black md:bg-transparent bg-opacity-90 md:bg-opacity-0 p-6 md:p-0 text-center md:text-left rounded-lg">
+      <li><a href="#about" class="block py-2 hover:text-yellow-400">About</a></li>
+      <li><a href="#experience" class="block py-2 hover:text-yellow-400">Experience</a></li>
+      <li><a href="#skills" class="block py-2 hover:text-yellow-400">Skills</a></li>
+      <li><a href="#projects" class="block py-2 hover:text-yellow-400">Projects</a></li>
+      <li><a href="#education" class="block py-2 hover:text-yellow-400">Education</a></li>
+      <li><a href="#contact" class="block py-2 hover:text-yellow-400">Contact</a></li>
     </ul>
   </nav>
 </header>
@@ -52,8 +99,6 @@
     </p>
     <div class="flex space-x-4" data-aos="fade-up" data-aos-delay="400">
       <a href="#contact" class="bg-yellow-400 text-black px-6 py-3 rounded-full font-semibold hover:bg-yellow-300">Hire Me</a>
-
-      <!-- Download CV button (auto-generate PDF) -->
       <button id="downloadCV"
               class="bg-yellow-400 text-black px-6 py-3 rounded-full font-semibold hover:bg-yellow-300">
         Download CV
@@ -61,7 +106,7 @@
     </div>
   </section>
 
-  <!-- About Section -->
+  <!-- About -->
   <section id="about" class="py-20 bg-black bg-opacity-60 text-center">
     <div class="container mx-auto px-6">
       <h2 class="text-3xl font-bold mb-6" data-aos="fade-up">About Me</h2>
@@ -73,7 +118,7 @@
     </div>
   </section>
 
-  <!-- Experience Section -->
+  <!-- Experience -->
   <section id="experience" class="py-20">
     <div class="container mx-auto px-6">
       <h2 class="text-3xl font-bold mb-12 text-center" data-aos="fade-up">Experience</h2>
@@ -90,7 +135,7 @@
     </div>
   </section>
 
-  <!-- Skills Section -->
+  <!-- Skills -->
   <section id="skills" class="py-20 bg-black bg-opacity-60">
     <div class="container mx-auto px-6 text-center">
       <h2 class="text-3xl font-bold mb-12" data-aos="fade-up">Skills</h2>
@@ -105,7 +150,7 @@
     </div>
   </section>
 
-  <!-- Projects Section -->
+  <!-- Projects -->
   <section id="projects" class="py-20">
     <div class="container mx-auto px-6">
       <h2 class="text-3xl font-bold mb-12 text-center" data-aos="fade-up">Projects</h2>
@@ -113,7 +158,6 @@
         <div class="bg-gray-800 p-6 rounded-2xl shadow-lg" data-aos="fade-up" data-aos-delay="100">
           <h3 class="text-xl font-semibold">Portfolio Website</h3>
           <p class="mt-2 text-gray-300">A modern personal portfolio designed with HTML, CSS, and TailwindCSS.</p>
-          <a href="#" class="text-yellow-400 hover:underline">Live Demo</a>
         </div>
         <div class="bg-gray-800 p-6 rounded-2xl shadow-lg" data-aos="fade-up" data-aos-delay="200">
           <h3 class="text-xl font-semibold">Culinary Showcase</h3>
@@ -127,7 +171,7 @@
     </div>
   </section>
 
-  <!-- Education Section -->
+  <!-- Education -->
   <section id="education" class="py-20 bg-black bg-opacity-60">
     <div class="container mx-auto px-6 text-center">
       <h2 class="text-3xl font-bold mb-12" data-aos="fade-up">Education</h2>
@@ -140,179 +184,69 @@
     </div>
   </section>
 
-  <!-- Contact Section -->
+  <!-- Contact -->
   <section id="contact" class="py-20">
     <div class="container mx-auto px-6 text-center">
       <h2 class="text-3xl font-bold mb-6" data-aos="fade-up">Contact Me</h2>
-      <p class="mb-6" data-aos="fade-up" data-aos-delay="200">Let's connect! Reach me via email or social platforms.</p>
+      <p class="mb-6" data-aos="fade-up" data-aos-delay="200">Let's connect! Reach me via email or message me directly below.</p>
+      
+      <!-- Contact Info -->
       <p id="contactEmail" class="mb-2">Email: <a href="mailto:akashpainuly@example.com" class="text-yellow-400">akashpainuly@example.com</a></p>
       <p id="contactPhone">Phone: +91 9876543210</p>
       <p id="contactAddress" class="mt-2 opacity-80">Address: Canal Road, Gumaniwala, Rishikesh, Dehradun</p>
+      
+      <!-- Contact Form -->
+      <div class="form-box mt-8">
+        <form id="contact-form">
+          <input type="text" name="from_name" placeholder="Your Name" required>
+          <input type="email" name="reply_to" placeholder="Your Email" required>
+          <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+          <button class="contact-btn bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+  Contact Me
+</button>
+        </form>
+        <div class="loader" id="loader"></div>
+        <div id="status"></div>
+      </div>
     </div>
   </section>
 
+  <!-- Scripts -->
   <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>AOS.init({ duration: 1000, once: true });</script>
+  
+  <!-- Navbar Toggle -->
   <script>
-    AOS.init({ duration: 1000, once: true });
+    const menuBtn = document.getElementById("menuBtn");
+    const menuLinks = document.getElementById("menuLinks");
+    menuBtn.addEventListener("click", () => {
+      menuLinks.classList.toggle("hidden");
+    });
   </script>
 
-  <!-- jsPDF for Auto CV -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- EmailJS -->
   <script>
-    // Helper: wrap long text within page width
-    function wrapText(doc, text, x, y, maxWidth, lineHeight) {
-      const splitted = doc.splitTextToSize(text, maxWidth);
-      splitted.forEach(line => {
-        if (y > 280) {
-          doc.addPage();
-          y = 20;
-        }
-        doc.text(line, x, y);
-        y += lineHeight;
+    (function(){
+      emailjs.init({ publicKey: "bFwc2sN6Gh0MaqEYT" });
+    })();
+
+    document.getElementById("contact-form").addEventListener("submit", function(event) {
+      event.preventDefault();
+      let form = this;
+      document.getElementById("loader").style.display = "block";
+      document.getElementById("status").innerHTML = "";
+      emailjs.send("service_okh8sae", "template_docewkn", {
+        from_name: form.from_name.value,
+        reply_to: form.reply_to.value,
+        message: form.message.value
+      }).then(() => {
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("status").innerHTML = "<p class='success'>✅ Message bhej diya gaya!</p>";
+        form.reset();
+      }, (error) => {
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("status").innerHTML = "<p class='error'>❌ Message nahi bheja gaya. Error: " + JSON.stringify(error) + "</p>";
       });
-      return y;
-    }
-
-    // Convert image to Base64
-    function toBase64(url) {
-      return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.crossOrigin = 'Anonymous';
-        img.onload = function () {
-          const canvas = document.createElement("canvas");
-          canvas.width = img.width;
-          canvas.height = img.height;
-          const ctx = canvas.getContext("2d");
-          ctx.drawImage(img, 0, 0);
-          resolve(canvas.toDataURL("image/png"));
-        };
-        img.onerror = reject;
-        img.src = url;
-      });
-    }
-
-    // Extract data from DOM to build CV
-    function buildProfileData() {
-      const nameFromNav = document.getElementById('siteName')?.textContent.trim() || 'Akash Painuly';
-      const nameFromHero = document.getElementById('heroName')?.textContent.replace("Hi, I'm", '').trim() || nameFromNav;
-
-      const tagline = document.getElementById('heroTagline')?.textContent.trim() || '';
-      const about = document.getElementById('aboutText')?.textContent.trim() || '';
-
-      const expCards = Array.from(document.querySelectorAll('#experienceList > div'));
-      const experience = expCards.map(card => {
-        const title = card.querySelector('h3')?.textContent.trim() || '';
-        const desc  = card.querySelector('p')?.textContent.trim() || '';
-        return `${title} — ${desc}`;
-      });
-
-      const skillChips = Array.from(document.querySelectorAll('#skillsChips span')).map(s => s.textContent.trim());
-
-      const eduItems = Array.from(document.querySelectorAll('#educationList li')).map(li => li.textContent.trim());
-
-      const emailText = document.querySelector('#contactEmail a')?.textContent.trim() || '';
-      const phoneText = document.getElementById('contactPhone')?.textContent.replace('Phone:', '').trim() || '';
-      const address   = document.getElementById('contactAddress')?.textContent.replace('Address:', '').trim() || '';
-
-      return {
-        name: nameFromHero || nameFromNav,
-        tagline,
-        about,
-        experience,
-        skills: skillChips,
-        education: eduItems,
-        contact: { email: emailText, phone: phoneText, address }
-      };
-    }
-
-    // Generate PDF using jsPDF
-    async function generatePDF() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF('p', 'mm', 'a4');
-
-      const data = buildProfileData();
-
-      // Profile Image (left top)
-      try {
-        const imgData = await toBase64("1000053646.png");
-        doc.addImage(imgData, "PNG", 20, 15, 30, 30);
-      } catch (e) {
-        console.log("Image load error:", e);
-      }
-
-      // Header text
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(22);
-      doc.text(data.name, 60, 25);
-
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(11);
-      let y = 32;
-      if (data.contact.email) { doc.text(`Email: ${data.contact.email}`, 60, y); y += 6; }
-      if (data.contact.phone) { doc.text(`Phone: ${data.contact.phone}`, 60, y); y += 6; }
-      if (data.contact.address) { y = wrapText(doc, `Address: ${data.contact.address}`, 60, y, 120, 6); }
-
-      // Divider
-      y += 4;
-      doc.setDrawColor(230);
-      doc.line(20, y, 190, y);
-      y += 10;
-
-      // Tagline
-      if (data.tagline) {
-        doc.setFont('helvetica', 'italic');
-        doc.setFontSize(12);
-        y = wrapText(doc, data.tagline, 20, y, 170, 6);
-        y += 6;
-      }
-
-      // About
-      if (data.about) {
-        doc.setFont('helvetica', 'bold'); doc.setFontSize(14); doc.text('About', 20, y); y += 8;
-        doc.setFont('helvetica', 'normal'); doc.setFontSize(11);
-        y = wrapText(doc, data.about, 20, y, 170, 6);
-        y += 4;
-      }
-
-      // Experience
-      if (data.experience?.length) {
-        doc.setFont('helvetica', 'bold'); doc.setFontSize(14); doc.text('Experience', 20, y); y += 8;
-        doc.setFont('helvetica', 'normal'); doc.setFontSize(11);
-        data.experience.forEach((item, idx) => {
-          y = wrapText(doc, `• ${item}`, 20, y, 170, 6);
-          if (idx !== data.experience.length - 1) y += 2;
-        });
-        y += 4;
-      }
-
-      // Education
-      if (data.education?.length) {
-        doc.setFont('helvetica', 'bold'); doc.setFontSize(14); doc.text('Education', 20, y); y += 8;
-        doc.setFont('helvetica', 'normal'); doc.setFontSize(11);
-        data.education.forEach((item, idx) => {
-          y = wrapText(doc, `• ${item}`, 20, y, 170, 6);
-          if (idx !== data.education.length - 1) y += 2;
-        });
-        y += 4;
-      }
-
-      // Skills
-      if (data.skills?.length) {
-        doc.setFont('helvetica', 'bold'); doc.setFontSize(14); doc.text('Skills', 20, y); y += 8;
-        doc.setFont('helvetica', 'normal'); doc.setFontSize(11);
-        const skillLine = data.skills.join(' • ');
-        y = wrapText(doc, skillLine, 20, y, 170, 6);
-      }
-
-      // Footer
-      doc.setFontSize(9);
-      doc.text(`Generated from portfolio • ${new Date().toLocaleDateString()}`, 20, 290);
-
-      doc.save('Akash_Painuly_CV.pdf');
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-      document.getElementById('downloadCV').addEventListener('click', generatePDF);
     });
   </script>
 </body>
